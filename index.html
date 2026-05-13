@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repuestos Chevrolet | Original ACDelco & GM</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <div class="header-top-inner">
+          <span class="header-tagline">🔧 Repuestos Originales Chevrolet | ACDelco &amp; GM</span>
+          <div class="header-top-actions">
+            <a href="tel:+56926809985" class="top-call-link" onclick="registerCallLead(event)">📞 +56 9 2680 9985</a>
+            <button class="top-quote-btn" onclick="openQuoteModal()">📝 Solicitar Cotización</button>
+            <button class="top-policies-btn" onclick="openPolicies()">📋 Políticas y Devoluciones</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="header-main">
+      <div class="container">
+        <div class="header-inner">
+          <img src="images/logo-inalco.jpg" alt="Inalco Chevrolet" class="header-inalco-logo">
+          <div class="header-search">
+            <div class="search-box">
+              <input type="text" id="searchInput" placeholder="Buscar repuesto, código o modelo compatible..." autocomplete="off">
+              <button class="search-btn" onclick="doSearch()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="header-actions">
+            <button class="call-btn" onclick="openCallModal()">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+              <span class="call-label">Llamar</span>
+            </button>
+            <button class="cart-btn" onclick="toggleCart()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              <span class="cart-label">Carrito</span>
+              <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner Animado -->
+  <section class="hero">
+    <!-- Fondo animado: engranajes y partículas -->
+    <div class="hero-bg">
+      <div class="hero-gear hero-gear-1">
+        <svg viewBox="0 0 100 100" fill="none"><path fill="rgba(204,0,0,0.18)" d="M50 10a4 4 0 014 4v6a28 28 0 0111.3 4.7l4.2-4.2a4 4 0 015.7 5.7l-4.2 4.2A28 28 0 0175.3 42H82a4 4 0 010 8h-6.7a28 28 0 01-4.6 11.3l4.2 4.2a4 4 0 01-5.7 5.7L65 67a28 28 0 01-11.3 4.6V78a4 4 0 01-8 0v-6.4A28 28 0 0134.4 65l-4.2 4.2a4 4 0 01-5.7-5.7l4.2-4.2A28 28 0 0124.7 48H18a4 4 0 010-8h6.7a28 28 0 014.6-11.3l-4.2-4.2a4 4 0 015.7-5.7l4.2 4.2A28 28 0 0146 18.7V14a4 4 0 014-4zm0 26a14 14 0 100 28 14 14 0 000-28z"/></svg>
+      </div>
+      <div class="hero-gear hero-gear-2">
+        <svg viewBox="0 0 100 100" fill="none"><path fill="rgba(204,0,0,0.12)" d="M50 10a4 4 0 014 4v6a28 28 0 0111.3 4.7l4.2-4.2a4 4 0 015.7 5.7l-4.2 4.2A28 28 0 0175.3 42H82a4 4 0 010 8h-6.7a28 28 0 01-4.6 11.3l4.2 4.2a4 4 0 01-5.7 5.7L65 67a28 28 0 01-11.3 4.6V78a4 4 0 01-8 0v-6.4A28 28 0 0134.4 65l-4.2 4.2a4 4 0 01-5.7-5.7l4.2-4.2A28 28 0 0124.7 48H18a4 4 0 010-8h6.7a28 28 0 014.6-11.3l-4.2-4.2a4 4 0 015.7-5.7l4.2 4.2A28 28 0 0146 18.7V14a4 4 0 014-4zm0 26a14 14 0 100 28 14 14 0 000-28z"/></svg>
+      </div>
+      <div class="hero-gear hero-gear-3">
+        <svg viewBox="0 0 100 100" fill="none"><path fill="rgba(255,255,255,0.04)" d="M50 10a4 4 0 014 4v6a28 28 0 0111.3 4.7l4.2-4.2a4 4 0 015.7 5.7l-4.2 4.2A28 28 0 0175.3 42H82a4 4 0 010 8h-6.7a28 28 0 01-4.6 11.3l4.2 4.2a4 4 0 01-5.7 5.7L65 67a28 28 0 01-11.3 4.6V78a4 4 0 01-8 0v-6.4A28 28 0 0134.4 65l-4.2 4.2a4 4 0 01-5.7-5.7l4.2-4.2A28 28 0 0124.7 48H18a4 4 0 010-8h6.7a28 28 0 014.6-11.3l-4.2-4.2a4 4 0 015.7-5.7l4.2 4.2A28 28 0 0146 18.7V14a4 4 0 014-4zm0 26a14 14 0 100 28 14 14 0 000-28z"/></svg>
+      </div>
+      <div class="hero-lines">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="hero-split">
+
+        <!-- Lado izquierdo: texto -->
+        <div class="hero-left">
+          <div class="hero-badge">✦ Concesionario Oficial Chevrolet</div>
+          <h1 class="hero-title">Repuestos<br><span>Originales</span><br>Chevrolet</h1>
+          <p class="hero-subtitle">Stock disponible · Precios competitivos<br>Compatibilidad verificada por modelo</p>
+          <div class="hero-stats">
+            <div class="stat"><span class="stat-num" id="statTotal">95</span><span class="stat-label">Productos</span></div>
+            <div class="stat"><span class="stat-num" id="statInStock">—</span><span class="stat-label">Con Stock</span></div>
+            <div class="stat"><span class="stat-num">2</span><span class="stat-label">Marcas</span></div>
+          </div>
+          <a href="#catalogo" class="hero-cta" onclick="document.getElementById('catalogSection')?.scrollIntoView({behavior:'smooth'});return false;">
+            Ver Catálogo
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <!-- Lado derecho: logo Inalco animado -->
+        <div class="hero-right">
+          <div class="hero-logo-wrap">
+            <div class="hero-logo-ring hero-logo-ring-1"></div>
+            <div class="hero-logo-ring hero-logo-ring-2"></div>
+            <div class="hero-logo-ring hero-logo-ring-3"></div>
+            <img src="images/logo-inalco.jpg" alt="Inalco Chevrolet" class="hero-inalco-logo">
+            <div class="hero-logo-sparks">
+              <span class="spark s1"></span>
+              <span class="spark s2"></span>
+              <span class="spark s3"></span>
+              <span class="spark s4"></span>
+              <span class="spark s5"></span>
+              <span class="spark s6"></span>
+            </div>
+          </div>
+          <p class="hero-dealer-label">Distribuidor Autorizado</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo Slider / Marquee -->
+  <section class="logo-slider">
+    <div class="logo-slider-track">
+      <div class="logo-slider-inner" id="logoSliderInner">
+
+        <div class="logo-slide"><img src="images/logo-inalco.jpg"     alt="Inalco"          class="logo-img"></div>
+        <div class="logo-slide"><img src="images/logo-chevrolet.png" alt="Chevrolet"        class="logo-img"></div>
+        <div class="logo-slide"><img src="images/logo-acdelco.png"   alt="ACDelco"          class="logo-img"></div>
+        <div class="logo-slide"><img src="images/logo-gm.png"        alt="General Motors"   class="logo-img"></div>
+
+      </div><!-- /.logo-slider-inner (se duplica vía JS) -->
+    </div>
+  </section>
+
+  <!-- Model Search Tags -->
+  <section class="model-tags-bar">
+    <div class="container">
+      <div class="model-tags-inner">
+        <span class="model-tags-label">Buscar por modelo:</span>
+        <div class="model-tags-scroll" id="modelTagsScroll">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="container">
+      <div class="layout">
+
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+          <div class="filter-panel">
+            <h3 class="filter-title">Filtrar por</h3>
+            <div class="filter-group">
+              <label class="filter-label">Categoría</label>
+              <div class="filter-options" id="filterCategoria"></div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Marca</label>
+              <div class="filter-options" id="filterMarca"></div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Disponibilidad</label>
+              <label class="filter-check">
+                <input type="checkbox" id="filterStock" onchange="applyFilters()">
+                <span>Solo con stock</span>
+              </label>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Modelo compatible</label>
+              <input type="text" id="filterModelo" class="filter-input" placeholder="Ej: Tracker, Onix..." oninput="applyFilters()">
+            </div>
+            <button class="btn-clear" onclick="clearFilters()">Limpiar filtros</button>
+          </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <div class="catalog">
+          <div class="catalog-header">
+            <div class="catalog-info"><span id="resultCount">Cargando...</span></div>
+            <div class="catalog-controls">
+              <select id="sortSelect" onchange="applyFilters()" class="sort-select">
+                <option value="default">Ordenar por defecto</option>
+                <option value="price-asc">Precio: menor a mayor</option>
+                <option value="price-desc">Precio: mayor a menor</option>
+                <option value="name-asc">Nombre A-Z</option>
+              </select>
+            </div>
+          </div>
+          <div class="product-grid" id="productGrid"></div>
+          <div class="no-results" id="noResults" style="display:none">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <p>No se encontraron productos con esos filtros.</p>
+            <button class="btn-primary" onclick="clearFilters()">Ver todos los productos</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Outlet Section -->
+  <section class="outlet-section" id="outletSection">
+    <div class="container">
+      <div class="outlet-header">
+        <div class="outlet-title-block">
+          <span class="outlet-badge">OUTLET</span>
+          <h2 class="outlet-title">Ofertas y Descontinuados</h2>
+          <p class="outlet-subtitle">Repuestos con descuento, stock limitado o piezas descontinuadas</p>
+        </div>
+      </div>
+      <div class="product-grid" id="outletGrid"></div>
+      <div class="outlet-empty" id="outletEmpty" style="display:none">
+        <p>Próximamente cargaremos productos de outlet aquí.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>Tu Carrito</h2>
+      <button class="cart-close" onclick="toggleCart()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <div class="cart-empty" id="cartEmpty">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <p>Tu carrito está vacío</p>
+      </div>
+      <div id="cartItems"></div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">$0</span>
+      </div>
+      <p class="cart-note">* Precio final sujeto a confirmación.</p>
+      <button class="btn-checkout" onclick="openOrderForm()">Hacer Pedido</button>
+      <button class="btn-wa-cart" onclick="sendCartWhatsApp()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Enviar por WhatsApp
+      </button>
+      <button class="btn-clear-cart" onclick="clearCart()">Vaciar carrito</button>
+    </div>
+  </aside>
+
+  <!-- Product Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="product-modal" id="productModal">
+    <button class="modal-close" onclick="closeModal()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
+  <!-- Order Form Modal -->
+  <div class="modal-overlay" id="orderOverlay" onclick="closeOrderForm()"></div>
+  <div class="order-modal" id="orderModal">
+    <div class="order-modal-header">
+      <h2>Datos del Pedido</h2>
+      <button class="modal-close" onclick="closeOrderForm()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="order-modal-body">
+      <form id="orderForm" onsubmit="submitOrder(event)" novalidate>
+
+        <div class="form-section-title">Tipo de entrega</div>
+        <div class="delivery-options">
+          <label class="delivery-option">
+            <input type="radio" name="deliveryType" value="retiro" checked onchange="toggleDeliveryFields()">
+            <div class="delivery-option-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span>Retiro en Tienda</span>
+              <small>Sin costo adicional</small>
+            </div>
+          </label>
+          <label class="delivery-option">
+            <input type="radio" name="deliveryType" value="despacho" onchange="toggleDeliveryFields()">
+            <div class="delivery-option-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <span>Despacho a domicilio</span>
+              <small>Costo según destino</small>
+            </div>
+          </label>
+        </div>
+
+        <div class="form-section-title">Datos personales</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>RUT <span class="req">*</span></label>
+            <input type="text" id="fRut" placeholder="12.345.678-9" maxlength="12" oninput="formatRut(this)">
+            <span class="form-error" id="errRut"></span>
+          </div>
+          <div class="form-group">
+            <label>Nombre completo <span class="req">*</span></label>
+            <input type="text" id="fNombre" placeholder="Juan Pérez González">
+            <span class="form-error" id="errNombre"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Correo electrónico <span class="req">*</span></label>
+            <input type="email" id="fEmail" placeholder="juan@correo.cl">
+            <span class="form-error" id="errEmail"></span>
+          </div>
+          <div class="form-group">
+            <label>Teléfono <span class="req">*</span></label>
+            <input type="tel" id="fTelefono" placeholder="+56 9 1234 5678" maxlength="16">
+            <span class="form-error" id="errTelefono"></span>
+          </div>
+        </div>
+
+        <div id="despachoFields" style="display:none">
+          <div class="form-section-title">Dirección de despacho</div>
+          <div class="form-group">
+            <label>Dirección <span class="req">*</span></label>
+            <input type="text" id="fDireccion" placeholder="Av. Principal 1234, Depto 5B">
+            <span class="form-error" id="errDireccion"></span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Comuna <span class="req">*</span></label>
+              <input type="text" id="fComuna" placeholder="Las Condes">
+              <span class="form-error" id="errComuna"></span>
+            </div>
+            <div class="form-group">
+              <label>Ciudad</label>
+              <input type="text" id="fCiudad" placeholder="Santiago">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Notas adicionales</label>
+          <textarea id="fNotas" rows="2" placeholder="Indicaciones especiales, horario preferido, etc."></textarea>
+        </div>
+
+        <div class="order-summary-box" id="orderSummaryBox"></div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-submit-order">Confirmar Pedido</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Call Lead Modal -->
+  <div class="modal-overlay" id="callOverlay" onclick="closeCallModal()"></div>
+  <div class="call-modal" id="callModal">
+    <button class="modal-close" onclick="closeCallModal()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="call-modal-icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+    </div>
+    <h3>Conectar con ejecutivo</h3>
+    <p>Déjanos tus datos y te llamamos, o llámanos directamente ahora.</p>
+    <form id="callLeadForm" onsubmit="submitCallLead(event)" novalidate>
+      <div class="form-group">
+        <label>Tu nombre</label>
+        <input type="text" id="clNombre" placeholder="Juan Pérez">
+      </div>
+      <div class="form-group">
+        <label>Tu teléfono</label>
+        <input type="tel" id="clTelefono" placeholder="+56 9 1234 5678">
+      </div>
+      <div class="form-group">
+        <label>¿Qué necesitas?</label>
+        <input type="text" id="clConsulta" placeholder="Ej: Pastillas de freno para Onix 2020">
+      </div>
+      <div class="call-modal-actions">
+        <a href="tel:+56926809985" class="btn-call-direct" onclick="registerCallLead(event)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+          Llamar ahora
+        </a>
+        <button type="submit" class="btn-call-register">Solicitar que me llamen</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Policies Modal -->
+  <div class="modal-overlay" id="policiesOverlay" onclick="closePolicies()"></div>
+  <div class="policies-modal" id="policiesModal">
+    <button class="modal-close" onclick="closePolicies()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="policies-content">
+      <h2>📋 Políticas de Compra y Devoluciones</h2>
+      <p class="policies-subtitle">Conforme a la Ley N° 19.496 sobre Protección de los Derechos de los Consumidores</p>
+
+      <div class="policy-block">
+        <h3>1. Garantía Legal</h3>
+        <p>Todos los repuestos originales ACDelco y GM cuentan con garantía mínima de <strong>3 meses</strong> conforme al artículo 21 de la Ley 19.496. Si el producto presenta defectos de fabricación, el consumidor podrá optar por la reparación gratuita, reposición del producto o la devolución del dinero pagado.</p>
+      </div>
+
+      <div class="policy-block">
+        <h3>2. Derecho a Retracto</h3>
+        <p>Conforme al artículo 3° bis de la Ley 19.496, en compras realizadas a distancia (online o telefónicas), el consumidor tiene derecho a retractarse dentro de los <strong>10 días corridos</strong> desde la recepción del producto, siempre que este no haya sido instalado o usado. La devolución del dinero se efectuará dentro de los 10 días siguientes a la solicitud.</p>
+      </div>
+
+      <div class="policy-block">
+        <h3>3. Condiciones para Devolución</h3>
+        <ul>
+          <li>El repuesto debe estar en su empaque original, sin signos de uso ni instalación.</li>
+          <li>Se debe presentar boleta o comprobante de compra.</li>
+          <li>Repuestos eléctricos (sensores, bobinas) no admiten devolución una vez instalados.</li>
+          <li>Los productos del Outlet (descontinuados) no tienen devolución, salvo defecto de fabricación.</li>
+        </ul>
+      </div>
+
+      <div class="policy-block">
+        <h3>4. Procedimiento de Reclamo</h3>
+        <p>Para ejercer sus derechos, contáctenos por WhatsApp al <strong>+56 9 2680 9985</strong> o llámenos directamente. En caso de no recibir respuesta satisfactoria, puede recurrir al <strong>SERNAC</strong> (www.sernac.cl) o a los Juzgados de Policía Local correspondientes.</p>
+      </div>
+
+      <div class="policy-block">
+        <h3>5. Despacho y Retiro</h3>
+        <p>Los tiempos de despacho son de <strong>2 a 5 días hábiles</strong> según la región. El retiro en tienda está disponible de Lunes a Viernes de 09:00 a 18:00 hrs. Los costos de envío son de cargo del comprador y se informan al momento de confirmar el pedido.</p>
+      </div>
+
+      <div class="policy-block">
+        <h3>6. Precios</h3>
+        <p>Todos los precios incluyen IVA. Los precios publicados en el sitio son referenciales (PMP) y pueden estar sujetos a variaciones por tipo de cambio en piezas importadas. El precio definitivo se confirmará vía WhatsApp o correo electrónico antes de procesar el pago.</p>
+      </div>
+
+      <div class="policies-footer">
+        <a href="https://www.sernac.cl" target="_blank" rel="noopener" class="sernac-link">🔗 SERNAC — Servicio Nacional del Consumidor</a>
+        <a href="tel:+56926809985" class="btn-call-direct small">Consultar ahora</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp Floating Button -->
+  <a class="whatsapp-fab" href="https://wa.me/56926809985?text=Hola%2C%20me%20interesa%20cotizar%20repuestos%20Chevrolet" target="_blank" rel="noopener" title="Contactar por WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span class="whatsapp-fab-pulse"></span>
+  </a>
+
+  <!-- Toast -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="logo-main">Repuestos</span> <span class="logo-sub">CHEVROLET</span>
+          <p>Repuestos originales ACDelco y GM para tu Chevrolet.</p>
+        </div>
+        <div class="footer-info">
+          <p>📦 Despacho a todo Chile</p>
+          <p>✅ Repuestos 100% originales con garantía</p>
+          <p>📞 +56 9 2680 9985</p>
+        </div>
+        <div class="footer-links">
+          <button onclick="openPolicies()" class="footer-link-btn">📋 Políticas y Devoluciones</button>
+          <button onclick="openCallModal()" class="footer-link-btn">📞 Llamar a ejecutivo</button>
+          <a href="https://wa.me/56926809985" target="_blank" rel="noopener" class="footer-link-btn">💬 WhatsApp</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Repuestos Chevrolet. Todos los derechos reservados. | Conforme Ley 19.496</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <!-- Quote Request Modal -->
+  <div class="modal-overlay" id="quoteOverlay" onclick="closeQuoteModal()"></div>
+  <div class="quote-modal" id="quoteModal">
+    <div class="order-modal-header">
+      <h2>📝 Solicitar Cotización de Repuesto</h2>
+      <button class="modal-close" onclick="closeQuoteModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="order-modal-body">
+      <form onsubmit="submitQuote(event)">
+        <p class="quote-intro">Completa el formulario y te enviaremos una cotización personalizada a la brevedad.</p>
+
+        <div class="form-section-title">Datos de Contacto</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre Completo *</label>
+            <input type="text" id="qNombre" placeholder="Ej: Juan Pérez" oninput="clearErr('qErrNombre')">
+            <span class="form-error" id="qErrNombre"></span>
+          </div>
+          <div class="form-group">
+            <label>RUT</label>
+            <input type="text" id="qRut" placeholder="12.345.678-9" oninput="formatRut(this)">
+            <span class="form-error" id="qErrRut"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="qEmail" placeholder="correo@ejemplo.com" oninput="clearErr('qErrEmail')">
+            <span class="form-error" id="qErrEmail"></span>
+          </div>
+          <div class="form-group">
+            <label>Teléfono *</label>
+            <input type="tel" id="qTelefono" placeholder="+56 9 1234 5678" oninput="clearErr('qErrTelefono')">
+            <span class="form-error" id="qErrTelefono"></span>
+          </div>
+        </div>
+
+        <div class="form-section-title">Datos del Vehículo</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Modelo *</label>
+            <input type="text" id="qModelo" placeholder="Ej: Onix, Tracker, Cruze" oninput="clearErr('qErrModelo')">
+            <span class="form-error" id="qErrModelo"></span>
+          </div>
+          <div class="form-group">
+            <label>Año *</label>
+            <input type="number" id="qAnio" placeholder="Ej: 2022" min="1990" max="2030" oninput="clearErr('qErrAnio')">
+            <span class="form-error" id="qErrAnio"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Número de VIN</label>
+            <input type="text" id="qVin" placeholder="17 caracteres alfanuméricos" maxlength="17" style="text-transform:uppercase">
+            <span class="form-hint">Ubicado en el tablero o puerta del conductor</span>
+          </div>
+          <div class="form-group">
+            <label>Número de Chasis</label>
+            <input type="text" id="qChasis" placeholder="Ej: 9BGRD08X04G117226" style="text-transform:uppercase">
+            <span class="form-hint">Ubicado en el guardabarro o puerta</span>
+          </div>
+        </div>
+
+        <div class="form-section-title">Repuesto Requerido</div>
+        <div class="form-group">
+          <label>Descripción del Repuesto *</label>
+          <textarea id="qRepuesto" rows="3" placeholder="Ej: Pastillas de freno delantera, filtro de aceite, bobina de encendido..." oninput="clearErr('qErrRepuesto')"></textarea>
+          <span class="form-error" id="qErrRepuesto"></span>
+        </div>
+        <div class="form-group">
+          <label>Información adicional</label>
+          <textarea id="qNotas" rows="2" placeholder="Color, número de parte si lo tiene, urgencia, etc."></textarea>
+        </div>
+
+        <div class="order-modal-footer">
+          <button type="button" class="btn-secondary" onclick="closeQuoteModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Enviar Solicitud 📩</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Transaction Receipt Modal -->
+  <div class="modal-overlay" id="receiptOverlay"></div>
+  <div class="receipt-modal" id="receiptModal">
+    <div class="receipt-header">
+      <div class="receipt-check">✓</div>
+      <h2>¡Orden Confirmada!</h2>
+      <p class="receipt-sub">Tu pedido ha sido registrado exitosamente</p>
+    </div>
+    <div class="receipt-body">
+      <div class="receipt-code-block">
+        <span class="receipt-code-label">Código de Transacción</span>
+        <span class="receipt-code" id="receiptCode">—</span>
+      </div>
+      <div class="receipt-qr-section">
+        <div id="receiptQR"></div>
+        <p class="receipt-qr-hint">Presenta este QR al retirar en bodega</p>
+      </div>
+      <div class="receipt-details" id="receiptDetails"></div>
+    </div>
+    <div class="receipt-footer">
+      <button class="btn-secondary btn-print" onclick="window.print()">🖨️ Imprimir</button>
+      <button class="btn-primary" onclick="closeReceiptModal()">Listo</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/outlet.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
