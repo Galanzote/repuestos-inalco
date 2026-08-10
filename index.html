@@ -55,17 +55,16 @@
 
   <!-- Hero Banner Animado -->
   <section class="hero">
-    <!-- Fondo animado: engranajes y partículas -->
+    <!-- Fondo: carrusel de fotos reales de taller/vehículos -->
+    <div class="hero-photos" id="heroPhotos">
+      <div class="hero-photo active" style="background-image:url('images/hero/outlet-sail.jpg')"></div>
+      <div class="hero-photo" style="background-image:url('images/hero/cyber-autos.jpg')"></div>
+      <div class="hero-photo" style="background-image:url('images/hero/cyber-groove.jpg')"></div>
+      <div class="hero-photo" style="background-image:url('images/hero/venta-fabrica.jpg')"></div>
+      <div class="hero-photo" style="background-image:url('images/hero/silverado-week.jpg')"></div>
+    </div>
+    <div class="hero-overlay"></div>
     <div class="hero-bg">
-      <div class="hero-gear hero-gear-1">
-        <svg viewBox="0 0 100 100" fill="none"><path fill="rgba(204,0,0,0.18)" d="M50 10a4 4 0 014 4v6a28 28 0 0111.3 4.7l4.2-4.2a4 4 0 015.7 5.7l-4.2 4.2A28 28 0 0175.3 42H82a4 4 0 010 8h-6.7a28 28 0 01-4.6 11.3l4.2 4.2a4 4 0 01-5.7 5.7L65 67a28 28 0 01-11.3 4.6V78a4 4 0 01-8 0v-6.4A28 28 0 0134.4 65l-4.2 4.2a4 4 0 01-5.7-5.7l4.2-4.2A28 28 0 0124.7 48H18a4 4 0 010-8h6.7a28 28 0 014.6-11.3l-4.2-4.2a4 4 0 015.7-5.7l4.2 4.2A28 28 0 0146 18.7V14a4 4 0 014-4zm0 26a14 14 0 100 28 14 14 0 000-28z"/></svg>
-      </div>
-      <div class="hero-gear hero-gear-2">
-        <svg viewBox="0 0 100 100" fill="none"><path fill="rgba(204,0,0,0.12)" d="M50 10a4 4 0 014 4v6a28 28 0 0111.3 4.7l4.2-4.2a4 4 0 015.7 5.7l-4.2 4.2A28 28 0 0175.3 42H82a4 4 0 010 8h-6.7a28 28 0 01-4.6 11.3l4.2 4.2a4 4 0 01-5.7 5.7L65 67a28 28 0 01-11.3 4.6V78a4 4 0 01-8 0v-6.4A28 28 0 0134.4 65l-4.2 4.2a4 4 0 01-5.7-5.7l4.2-4.2A28 28 0 0124.7 48H18a4 4 0 010-8h6.7a28 28 0 014.6-11.3l-4.2-4.2a4 4 0 015.7-5.7l4.2 4.2A28 28 0 0146 18.7V14a4 4 0 014-4zm0 26a14 14 0 100 28 14 14 0 000-28z"/></svg>
-      </div>
-      <div class="hero-gear hero-gear-3">
-        <svg viewBox="0 0 100 100" fill="none"><path fill="rgba(255,255,255,0.04)" d="M50 10a4 4 0 014 4v6a28 28 0 0111.3 4.7l4.2-4.2a4 4 0 015.7 5.7l-4.2 4.2A28 28 0 0175.3 42H82a4 4 0 010 8h-6.7a28 28 0 01-4.6 11.3l4.2 4.2a4 4 0 01-5.7 5.7L65 67a28 28 0 01-11.3 4.6V78a4 4 0 01-8 0v-6.4A28 28 0 0134.4 65l-4.2 4.2a4 4 0 01-5.7-5.7l4.2-4.2A28 28 0 0124.7 48H18a4 4 0 010-8h6.7a28 28 0 014.6-11.3l-4.2-4.2a4 4 0 015.7-5.7l4.2 4.2A28 28 0 0146 18.7V14a4 4 0 014-4zm0 26a14 14 0 100 28 14 14 0 000-28z"/></svg>
-      </div>
       <div class="hero-lines">
         <span></span><span></span><span></span><span></span><span></span>
       </div>
@@ -118,7 +117,7 @@
     <div class="logo-slider-track">
       <div class="logo-slider-inner" id="logoSliderInner">
 
-        <div class="logo-slide"><img src="images/logo-inalco.jpg"     alt="Inalco"          class="logo-img"></div>
+        <div class="logo-slide"><img src="images/logo-inalco-slider.jpg" alt="Inalco"       class="logo-img"></div>
         <div class="logo-slide"><img src="images/logo-chevrolet.png" alt="Chevrolet"        class="logo-img"></div>
         <div class="logo-slide"><img src="images/logo-acdelco.png"   alt="ACDelco"          class="logo-img"></div>
         <div class="logo-slide"><img src="images/logo-gm.png"        alt="General Motors"   class="logo-img"></div>
@@ -463,7 +462,6 @@
     </div>
   </footer>
 
-  <script src="js/products.js"></script>
   <!-- Quote Request Modal -->
   <div class="modal-overlay" id="quoteOverlay" onclick="closeQuoteModal()"></div>
   <div class="quote-modal" id="quoteModal">

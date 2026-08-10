@@ -14,6 +14,7 @@ let currentModalId = null;
 /* ─── Init ───────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initLogoSlider();
+  initHeroCarousel();
   initStock();
   loadCart();
   buildFilters();
@@ -33,6 +34,18 @@ function initLogoSlider() {
   if (!inner) return;
   // Duplicate slides for seamless infinite loop
   inner.innerHTML += inner.innerHTML;
+}
+
+/* ─── Hero Photo Carousel ────────────────────────────────────── */
+function initHeroCarousel() {
+  const photos = document.querySelectorAll('#heroPhotos .hero-photo');
+  if (photos.length < 2) return;
+  let current = 0;
+  setInterval(() => {
+    photos[current].classList.remove('active');
+    current = (current + 1) % photos.length;
+    photos[current].classList.add('active');
+  }, 5000);
 }
 
 /* ─── Stock ──────────────────────────────────────────────────── */
@@ -285,6 +298,23 @@ function renderGrid() {
   grid.innerHTML = filtered.map(p => productCardHTML(p)).join('');
 }
 
+/* ─── Product Images ─────────────────────────────────────────── */
+function wrenchIconSvg(size, color, strokeW) {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${strokeW}"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>`;
+}
+
+function cardPlaceholderHTML(categoria) {
+  return `<div class="card-img-placeholder">${wrenchIconSvg(40, '#bbb', 1.5)}<span>${escHtml(categoria)}</span></div>`;
+}
+
+function cardImgFallback(imgEl, categoria) {
+  imgEl.outerHTML = cardPlaceholderHTML(categoria);
+}
+
+function modalImgFallback(imgEl) {
+  imgEl.outerHTML = wrenchIconSvg(64, '#ccc', 1.2);
+}
+
 /* ─── Product Card ───────────────────────────────────────────── */
 function stockBadgeData(id) {
   const available = getAvailableStock(id);
@@ -323,12 +353,13 @@ function productCardHTML(p, isOutlet = false) {
     addBtn = `<button class="card-add-btn" onclick="event.stopPropagation();addToCart(${p.id},1)">+ Agregar</button>`;
   }
 
+  const cardImgHtml = (p.imagenes && p.imagenes.length)
+    ? `<img class="card-img-photo" src="${escHtml(p.imagenes[0])}" alt="${escHtml(p.titulo)}" loading="lazy" onerror="cardImgFallback(this,'${escHtml(p.categoria)}')">`
+    : cardPlaceholderHTML(p.categoria);
+
   return `<div class="product-card ${available===0?'out-of-stock':''}" data-id="${p.id}" onclick="openModal(${p.id})">
     <div class="card-img">
-      <div class="card-img-placeholder">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
-        <span>${escHtml(p.categoria)}</span>
-      </div>
+      ${cardImgHtml}
       <div class="card-marca-badge">${escHtml(p.marca)}</div>
       <div class="card-stock-badge ${cls}">${label}</div>
       ${isOutlet && p.descuento ? `<div class="card-outlet-badge">-${p.descuento}%</div>` : ''}
@@ -381,10 +412,19 @@ function openModal(id) {
   const stockColor = available === 0 ? '#dc2626' : available <= 3 ? '#d97706' : '#16a34a';
   const stockText  = available === 0 ? 'Sin stock' : 'Disponible';
 
+  const imagenes = p.imagenes && p.imagenes.length ? p.imagenes : [];
+  const modalImgHtml = imagenes.length
+    ? `<img id="modalMainImg" src="${escHtml(imagenes[0])}" alt="${escHtml(p.titulo)}" onerror="modalImgFallback(this)">`
+    : wrenchIconSvg(64, '#ccc', 1.2);
+  const modalThumbsHtml = imagenes.length > 1
+    ? `<div class="modal-thumbs">${imagenes.map((img, i) => `<img class="modal-thumb${i===0?' active':''}" src="${escHtml(img)}" onclick="selectModalThumb(this)">`).join('')}</div>`
+    : '';
+
   document.getElementById('modalContent').innerHTML = `
     <div class="modal-img">
-      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      ${modalImgHtml}
     </div>
+    ${modalThumbsHtml}
     <div class="modal-body">
       <div class="modal-marca">${escHtml(p.marca)} · ${escHtml(p.categoria)}</div>
       <h2 class="modal-title">${escHtml(p.titulo)}</h2>
@@ -419,6 +459,14 @@ function openModal(id) {
   document.getElementById('modalOverlay').classList.add('open');
   document.getElementById('productModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+function selectModalThumb(thumbEl) {
+  const mainImg = document.getElementById('modalMainImg');
+  if (!mainImg) return;
+  mainImg.src = thumbEl.src;
+  thumbEl.parentElement.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+  thumbEl.classList.add('active');
 }
 
 function closeModal() {
