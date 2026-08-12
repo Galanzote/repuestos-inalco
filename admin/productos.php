@@ -16,6 +16,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $products = loadProducts($productsFile);
     if ($products === null) {
         $error = 'No se pudo leer js/products.js — no se guardó nada.';
+    } elseif (isset($_POST['eliminar_id'])) {
+        $eliminarId = (int) $_POST['eliminar_id'];
+        $titulo = null;
+        $products = array_values(array_filter($products, function ($p) use ($eliminarId, &$titulo) {
+            if ((int) $p['id'] === $eliminarId) { $titulo = $p['titulo']; return false; }
+            return true;
+        }));
+
+        if ($titulo === null) {
+            $error = 'No se encontró ese producto — no se eliminó nada.';
+        } elseif (saveProducts($productsFile, $products)) {
+            $mensaje = "Producto \"$titulo\" eliminado del catálogo.";
+        } else {
+            $error = 'El servidor no dejó guardar el archivo (permiso denegado). No se eliminó nada — avisa al encargado técnico.';
+        }
     } else {
         $precios      = $_POST['precio'] ?? [];
         $preciosVenta = $_POST['precioVenta'] ?? [];
@@ -66,7 +81,7 @@ function fmtMoney2($n) { return number_format((float) $n, 0, ',', '.'); }
         <thead>
           <tr>
             <th>Código</th><th>Título</th><th>Categoría</th><th>Stock</th>
-            <th>PMP (costo)</th><th>Precio Lista</th><th>Precio Final (cliente)</th>
+            <th>PMP (costo)</th><th>Precio Lista</th><th>Precio Final (cliente)</th><th></th>
           </tr>
         </thead>
         <tbody>
@@ -79,6 +94,7 @@ function fmtMoney2($n) { return number_format((float) $n, 0, ',', '.'); }
               <td class="items-detail">$<?= fmtMoney2($p['pmp']) ?></td>
               <td><input type="number" min="0" name="precio[<?= $id ?>]" value="<?= (int) $p['precio'] ?>" class="precio-input"></td>
               <td><input type="number" min="0" name="precioVenta[<?= $id ?>]" value="<?= (int) $p['precioVenta'] ?>" class="precio-input precio-final"></td>
+              <td><button type="submit" name="eliminar_id" value="<?= $id ?>" class="btn-eliminar" title="Eliminar producto" onclick="return confirm('¿Eliminar \'<?= htmlspecialchars(addslashes($p['titulo']), ENT_QUOTES) ?>\' del catálogo? Esto no se puede deshacer desde acá (pero queda un respaldo en js/backups).')">🗑️</button></td>
             </tr>
           <?php endforeach; ?>
         </tbody>
