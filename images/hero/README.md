@@ -30,12 +30,13 @@ La imagen se estira/recorta automáticamente para cubrir todo el espacio disponi
 
 ## Fotos actuales
 
-| Archivo | Dimensiones | Origen |
+| Archivo | Dimensiones | Vehículo |
 |---|---|---|
-| `outlet-sail.jpg` | 1600×710 | Campaña Outlet Inalco (Sail HB) |
-| `cyber-autos.jpg` | 1600×424 | Campaña Cyber (3 vehículos) |
-| `cyber-groove.jpg` | 1600×544 | Campaña Cyber (Chevrolet Groove) |
-| `venta-fabrica.jpg` | 1600×577 | Venta de Fábrica (concesionario + 3 vehículos) |
-| `silverado-week.jpg` | 1600×577 | Silverado Week |
+| `inalco-chevrolet.jpg` | 1600×600 | Concesionario Inalco (fachada + 4 vehículos) |
+| `colorado.jpg` | 1600×600 | Chevrolet Colorado |
+| `silverado.jpg` | 1600×600 | Chevrolet Silverado |
+| `groove.jpg` | 1600×600 | Chevrolet Groove |
+| `blazer.jpg` | 1600×600 | Chevrolet Blazer |
+| `sail-sedan.jpg` | 1600×600 | Chevrolet Sail Sedán |
 
-Estas cinco tienen alturas distintas entre sí porque cada una se recortó a mano para evitar el texto de su diseño original. Las próximas que se agreguen, si vienen ya preparadas con la dimensión recomendada (1600×600), no van a necesitar ese ajuste manual.
+Estas seis ya vienen en la dimensión recomendada (1600×600), sin texto de precios ni promociones — no necesitaron recorte manual.
