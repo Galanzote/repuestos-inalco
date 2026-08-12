@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $ext = $mimeAExt[$info['mime']];
             $destino = $fotosDir . '/' . $codigo . '-' . $indice . '.' . $ext;
-            if (move_uploaded_file($tmp, $destino)) {
+            if (@move_uploaded_file($tmp, $destino)) {
                 $imagenes[] = 'images/productos/' . $codigo . '-' . $indice . '.' . $ext;
                 $indice++;
             } else {
@@ -111,11 +111,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
         $products[] = $nuevoProducto;
-        saveProducts($productsFile, $products);
 
-        $mensaje = "Producto \"$titulo\" agregado con id $nuevoId.";
-        // Limpiar el formulario tras guardar con éxito.
-        foreach ($valores as $k => $v) $valores[$k] = '';
+        if (saveProducts($productsFile, $products)) {
+            $mensaje = "Producto \"$titulo\" agregado con id $nuevoId.";
+            // Limpiar el formulario tras guardar con éxito.
+            foreach ($valores as $k => $v) $valores[$k] = '';
+        } else {
+            $errores[] = 'El servidor no dejó guardar el archivo (permiso denegado). El producto NO quedó guardado — avisa al encargado técnico.';
+        }
     }
 }
 ?>

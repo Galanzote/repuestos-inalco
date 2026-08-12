@@ -151,8 +151,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 'preview') {
             if ($tocoAlgo) $aplicados++;
         }
 
-        saveProducts($productsFile, $products);
-        $mensaje = "Se aplicaron cambios a {$aplicados} producto(s).";
+        if (saveProducts($productsFile, $products)) {
+            $mensaje = "Se aplicaron cambios a {$aplicados} producto(s).";
+        } else {
+            $error = 'El servidor no dejó guardar el archivo (permiso denegado). No se aplicó ningún cambio — avisa al encargado técnico.';
+        }
     }
 }
 

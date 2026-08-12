@@ -31,8 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         unset($p);
 
-        saveProducts($productsFile, $products);
-        $mensaje = 'Cambios guardados correctamente.';
+        if (saveProducts($productsFile, $products)) {
+            $mensaje = 'Cambios guardados correctamente.';
+        } else {
+            $error = 'El servidor no dejó guardar el archivo (permiso denegado). No se aplicó ningún cambio — avisa al encargado técnico.';
+        }
     }
 }
 
