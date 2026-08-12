@@ -188,7 +188,7 @@ function sendCartWhatsApp() {
     if (p) msg += `• ${p.titulo} (Cód: ${p.codigo}) x${qty} — $${formatNum(p.precioVenta)}\n`;
   });
   msg += `\nTOTAL ESTIMADO: $${formatNum(getCartTotal())}`;
-  window.open('https://wa.me/56926809985?text='+encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank');
 }
 
 /* ─── Model Tags ─────────────────────────────────────────────── */
@@ -450,7 +450,7 @@ function openModal(id) {
         </button>
       </div>
       <div style="margin-top:12px;display:flex;gap:8px;">
-        <a class="btn-call-direct" style="flex:1;text-align:center;font-size:13px;padding:9px;" href="https://wa.me/56926809985?text=${encodeURIComponent('Hola, quiero consultar por: '+p.titulo+' (Cód: '+p.codigo+')')}" target="_blank">
+        <a class="btn-call-direct" style="flex:1;text-align:center;font-size:13px;padding:9px;" href="https://wa.me/56972306103?text=${encodeURIComponent('Hola, quiero consultar por: '+p.titulo+' (Cód: '+p.codigo+')')}" target="_blank">
           💬 Consultar por WhatsApp
         </a>
       </div>
@@ -621,7 +621,7 @@ function submitOrder(e) {
 
   // Notificar al ejecutivo por WhatsApp
   const msg = `🚗 *Nuevo pedido — Inalco Chevrolet*\n\n*N°:* ${order.id}\n*Cliente:* ${nombre}\n*RUT:* ${rut}\n*Teléfono:* ${telefono}\n*Email:* ${email}\n*Entrega:* ${deliveryType === 'retiro' ? 'Retiro en bodega' : 'Despacho a '+direccion+', '+comuna}\n\n*Productos:*\n${items.map(i=>`• ${i.titulo} x${i.qty} — $${formatNum(i.precio*i.qty)}`).join('\n')}\n\n*TOTAL: $${formatNum(order.total)}*`;
-  setTimeout(() => window.open('https://wa.me/56926809985?text='+encodeURIComponent(msg), '_blank'), 600);
+  setTimeout(() => window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank'), 600);
 }
 
 /* ─── Call Lead Modal ────────────────────────────────────────── */
@@ -657,7 +657,7 @@ function submitCallLead(e) {
   closeCallModal();
   showToast('¡Recibido! Te llamaremos pronto.', 'success');
   const msg = `📞 *Solicitud de llamada*\n\n*Nombre:* ${nombre||'No indicado'}\n*Teléfono:* ${telefono}\n*Consulta:* ${consulta||'Sin especificar'}`;
-  window.open('https://wa.me/56926809985?text='+encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank');
 }
 
 function saveLead(data) {
@@ -711,7 +711,7 @@ function submitQuote(e) {
   localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
 
   const msg = `🔧 *Nueva Solicitud de Cotización — Inalco Chevrolet*\n\n*N°:* ${quoteId}\n*Nombre:* ${nombre}${rut ? '\n*RUT:* '+rut : ''}\n*Email:* ${email}\n*Teléfono:* ${telefono}\n\n*Vehículo:*\n• Modelo: ${modelo}\n• Año: ${anio}${vin ? '\n• VIN: '+vin : ''}${chasis ? '\n• Chasis: '+chasis : ''}\n\n*Repuesto solicitado:*\n${repuesto}${notas ? '\n\n*Notas:* '+notas : ''}`;
-  window.open('https://wa.me/56926809985?text=' + encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/56972306103?text=' + encodeURIComponent(msg), '_blank');
 
   closeQuoteModal();
   showToast('¡Cotización enviada! Te contactaremos pronto.', 'success');
