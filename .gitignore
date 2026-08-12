@@ -1,3 +1,6 @@
 # Credenciales reales de base de datos — nunca se suben al repo.
 # Copia api/db.example.php como api/db.php y complétalo solo en el servidor.
 api/db.php
+
+# Respaldos automáticos que genera admin/productos.php al guardar precios.
+js/backups/
