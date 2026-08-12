@@ -279,6 +279,16 @@ input, select { font-family: inherit; }
 .btn-primary { background: var(--blue); color: white; padding: 10px 24px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; transition: background var(--transition); }
 .btn-primary:hover { background: var(--blue-dark); }
 
+/* ─── Ubicación / Mapa ─────────────────────────────────── */
+.map-section { background: var(--gray-bg); padding: 48px 0; border-top: 1px solid var(--gray-light); }
+.map-header { text-align: center; margin-bottom: 20px; }
+.map-title { font-size: 26px; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
+.map-address { font-size: 14px; color: var(--gray); }
+.map-embed { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-md); line-height: 0; }
+.map-embed iframe { display: block; }
+.map-directions-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; margin: 20px auto 0; background: var(--blue); color: white; padding: 11px 24px; border-radius: var(--radius-sm); font-weight: 700; font-size: 14px; transition: background var(--transition); }
+.map-directions-btn:hover { background: var(--blue-dark); }
+
 /* ─── Footer ───────────────────────────────────────────── */
 .footer { background: var(--dark); color: #9ca3af; padding: 40px 0 0; }
 .footer-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,.08); }
