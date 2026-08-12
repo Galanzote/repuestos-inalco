@@ -188,7 +188,7 @@ function sendCartWhatsApp() {
     if (p) msg += `• ${p.titulo} (Cód: ${p.codigo}) x${qty} — $${formatNum(p.precioVenta)}\n`;
   });
   msg += `\nTOTAL ESTIMADO: $${formatNum(getCartTotal())}`;
-  window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
 }
 
 /* ─── Model Tags ─────────────────────────────────────────────── */
@@ -450,7 +450,7 @@ function openModal(id) {
         </button>
       </div>
       <div style="margin-top:12px;display:flex;gap:8px;">
-        <a class="btn-call-direct" style="flex:1;text-align:center;font-size:13px;padding:9px;" href="https://wa.me/56972306103?text=${encodeURIComponent('Hola, quiero consultar por: '+p.titulo+' (Cód: '+p.codigo+')')}" target="_blank">
+        <a class="btn-call-direct" style="flex:1;text-align:center;font-size:13px;padding:9px;" href="https://wa.me/56972306103?text=${encodeURIComponent('Hola, quiero consultar por: '+p.titulo+' (Cód: '+p.codigo+')')}" target="_blank" rel="noopener noreferrer">
           💬 Consultar por WhatsApp
         </a>
       </div>
@@ -608,6 +608,14 @@ function submitOrder(e) {
   orders.push(order);
   localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 
+  // Copia al panel de control (backend). Si falla (sin conexión, backend caído),
+  // el pedido igual queda en localStorage y se notifica por WhatsApp más abajo.
+  fetch('api/orders.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(order)
+  }).catch(() => {});
+
   // Descontar stock definitivamente
   items.forEach(item => {
     stock[item.id] = Math.max(0, (stock[item.id] || 0) - item.qty);
@@ -621,7 +629,7 @@ function submitOrder(e) {
 
   // Notificar al ejecutivo por WhatsApp
   const msg = `🚗 *Nuevo pedido — Inalco Chevrolet*\n\n*N°:* ${order.id}\n*Cliente:* ${nombre}\n*RUT:* ${rut}\n*Teléfono:* ${telefono}\n*Email:* ${email}\n*Entrega:* ${deliveryType === 'retiro' ? 'Retiro en bodega' : 'Despacho a '+direccion+', '+comuna}\n\n*Productos:*\n${items.map(i=>`• ${i.titulo} x${i.qty} — $${formatNum(i.precio*i.qty)}`).join('\n')}\n\n*TOTAL: $${formatNum(order.total)}*`;
-  setTimeout(() => window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank'), 600);
+  setTimeout(() => window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank', 'noopener,noreferrer'), 600);
 }
 
 /* ─── Call Lead Modal ────────────────────────────────────────── */
@@ -657,7 +665,7 @@ function submitCallLead(e) {
   closeCallModal();
   showToast('¡Recibido! Te llamaremos pronto.', 'success');
   const msg = `📞 *Solicitud de llamada*\n\n*Nombre:* ${nombre||'No indicado'}\n*Teléfono:* ${telefono}\n*Consulta:* ${consulta||'Sin especificar'}`;
-  window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
 }
 
 function saveLead(data) {
@@ -711,7 +719,7 @@ function submitQuote(e) {
   localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
 
   const msg = `🔧 *Nueva Solicitud de Cotización — Inalco Chevrolet*\n\n*N°:* ${quoteId}\n*Nombre:* ${nombre}${rut ? '\n*RUT:* '+rut : ''}\n*Email:* ${email}\n*Teléfono:* ${telefono}\n\n*Vehículo:*\n• Modelo: ${modelo}\n• Año: ${anio}${vin ? '\n• VIN: '+vin : ''}${chasis ? '\n• Chasis: '+chasis : ''}\n\n*Repuesto solicitado:*\n${repuesto}${notas ? '\n\n*Notas:* '+notas : ''}`;
-  window.open('https://wa.me/56972306103?text=' + encodeURIComponent(msg), '_blank');
+  window.open('https://wa.me/56972306103?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
 
   closeQuoteModal();
   showToast('¡Cotización enviada! Te contactaremos pronto.', 'success');
@@ -737,13 +745,13 @@ function openReceiptModal(order) {
   const fmt = n => '$' + formatNum(n);
   const detHtml = `
     <div class="receipt-info-grid">
-      <span>Cliente</span><span>${order.nombre}</span>
-      <span>RUT</span><span>${order.rut}</span>
+      <span>Cliente</span><span>${escHtml(order.nombre)}</span>
+      <span>RUT</span><span>${escHtml(order.rut)}</span>
       <span>Fecha</span><span>${new Date(order.fecha).toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'})}</span>
-      <span>Entrega</span><span>${order.deliveryType === 'retiro' ? 'Retiro en bodega' : 'Despacho — '+order.comuna}</span>
+      <span>Entrega</span><span>${order.deliveryType === 'retiro' ? 'Retiro en bodega' : 'Despacho — '+escHtml(order.comuna)}</span>
     </div>
     <div class="receipt-items">
-      ${order.items.map(i=>`<div class="receipt-item"><span>${i.titulo}</span><span>x${i.qty}</span><span>${fmt(i.precio*i.qty)}</span></div>`).join('')}
+      ${order.items.map(i=>`<div class="receipt-item"><span>${escHtml(i.titulo)}</span><span>x${i.qty}</span><span>${fmt(i.precio*i.qty)}</span></div>`).join('')}
     </div>
     <div class="receipt-total">TOTAL <strong>${fmt(order.total)}</strong></div>`;
   document.getElementById('receiptDetails').innerHTML = detHtml;
