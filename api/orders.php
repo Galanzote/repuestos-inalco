@@ -5,6 +5,9 @@
  * ajenos desde aca (eso vive en admin/index.php, protegido por sesion).
  */
 
+// Se guarda siempre en UTC (sin ambiguedad) — la conversion a hora de Chile
+// se hace solo al mostrarla en admin/index.php.
+date_default_timezone_set('UTC');
 header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

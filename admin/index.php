@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Santiago');
 require __DIR__ . '/auth.php';
 require __DIR__ . '/../api/db.php';
 
@@ -35,6 +36,15 @@ if ($filtro !== '') {
 $orders = $stmt->fetchAll();
 
 function fmtMoney($n) { return '$' . number_format((float) $n, 0, ',', '.'); }
+
+// $mysqlDatetime esta guardado en UTC (ver api/orders.php) — se convierte
+// explicitamente a hora de Chile para mostrar, sin depender de la zona
+// horaria por defecto del servidor.
+function fmtFechaCL($mysqlDatetime) {
+    $dt = new DateTime($mysqlDatetime, new DateTimeZone('UTC'));
+    $dt->setTimezone(new DateTimeZone('America/Santiago'));
+    return $dt->format('d-m-Y H:i');
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -76,7 +86,7 @@ function fmtMoney($n) { return '$' . number_format((float) $n, 0, ',', '.'); }
           <?php $items = json_decode($o['items'], true) ?: []; ?>
           <tr>
             <td><?= htmlspecialchars($o['order_code'], ENT_QUOTES) ?></td>
-            <td><?= htmlspecialchars(date('d-m-Y H:i', strtotime($o['fecha'])), ENT_QUOTES) ?></td>
+            <td><?= htmlspecialchars(fmtFechaCL($o['fecha']), ENT_QUOTES) ?></td>
             <td><?= htmlspecialchars($o['nombre'], ENT_QUOTES) ?></td>
             <td><?= htmlspecialchars($o['rut'], ENT_QUOTES) ?></td>
             <td><?= htmlspecialchars($o['telefono'], ENT_QUOTES) ?><br><span style="color:#888"><?= htmlspecialchars($o['email'], ENT_QUOTES) ?></span></td>
