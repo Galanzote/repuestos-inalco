@@ -624,6 +624,12 @@ function submitOrder(e) {
   clearCart();
   closeOrderForm();
 
+  // Limpiar el formulario para que el siguiente pedido no arranque con los
+  // datos del cliente anterior (importante en equipos compartidos de tienda).
+  document.getElementById('orderForm').reset();
+  ['errRut','errNombre','errEmail','errTelefono','errDireccion','errComuna'].forEach(clearErr);
+  toggleDeliveryFields();
+
   // Mostrar recibo con QR
   openReceiptModal(order);
 
