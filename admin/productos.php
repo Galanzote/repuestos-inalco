@@ -1,47 +1,8 @@
 <?php
 require __DIR__ . '/auth.php';
+require __DIR__ . '/_products.php';
 
 $productsFile = __DIR__ . '/../js/products.js';
-
-/**
- * Lee js/products.js y devuelve el array de productos (o null si el
- * archivo no tiene el formato esperado).
- */
-function loadProducts($file) {
-    if (!file_exists($file)) return null;
-    $content = file_get_contents($file);
-    if (!preg_match('/const\s+PRODUCTS\s*=\s*(\[.*\])\s*;/s', $content, $m)) {
-        return null;
-    }
-    $data = json_decode($m[1], true);
-    return is_array($data) ? $data : null;
-}
-
-/**
- * Reescribe js/products.js con el array actualizado, dejando una copia
- * de respaldo con fecha antes de sobreescribir (se conservan las ultimas 20).
- */
-function saveProducts($file, $products) {
-    $backupDir = __DIR__ . '/../js/backups';
-    if (!is_dir($backupDir)) {
-        mkdir($backupDir, 0755, true);
-    }
-    if (file_exists($file)) {
-        copy($file, $backupDir . '/products_' . date('Ymd_His') . '.js');
-    }
-    $backups = glob($backupDir . '/products_*.js');
-    sort($backups);
-    while (count($backups) > 20) {
-        @unlink(array_shift($backups));
-    }
-
-    $lines = [];
-    foreach ($products as $p) {
-        $lines[] = '  ' . json_encode($p, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    }
-    $out = "const PRODUCTS = [\n" . implode(",\n", $lines) . "\n];\n";
-    file_put_contents($file, $out);
-}
 
 $mensaje = null;
 $error = null;
@@ -88,15 +49,7 @@ function fmtMoney2($n) { return number_format((float) $n, 0, ',', '.'); }
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <div class="admin-header">
-    <h1>💲 Precios y Stock — Inalco</h1>
-    <div>
-      <a href="index.php" style="margin-right:16px;">Pedidos</a>
-      <a href="productos.php" style="margin-right:16px;">Precios y Stock</a>
-      <span style="margin-right:16px;font-size:13px;">👤 <?= htmlspecialchars($_SESSION['admin_user'] ?? '', ENT_QUOTES) ?></span>
-      <a href="logout.php">Cerrar sesión</a>
-    </div>
-  </div>
+  <?php $navTitle = '💲 Precios y Stock — Inalco'; include __DIR__ . '/_nav.php'; ?>
 
   <div class="admin-wrap">
     <?php if ($mensaje): ?><div class="save-ok">✅ <?= htmlspecialchars($mensaje, ENT_QUOTES) ?></div><?php endif; ?>

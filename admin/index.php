@@ -55,15 +55,7 @@ function fmtFechaCL($mysqlDatetime) {
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <div class="admin-header">
-    <h1>📋 Panel de Pedidos — Inalco</h1>
-    <div>
-      <a href="index.php" style="margin-right:16px;">Pedidos</a>
-      <a href="productos.php" style="margin-right:16px;">Precios y Stock</a>
-      <span style="margin-right:16px;font-size:13px;">👤 <?= htmlspecialchars($_SESSION['admin_user'] ?? '', ENT_QUOTES) ?></span>
-      <a href="logout.php">Cerrar sesión</a>
-    </div>
-  </div>
+  <?php $navTitle = '📋 Panel de Pedidos — Inalco'; include __DIR__ . '/_nav.php'; ?>
 
   <div class="admin-wrap">
     <div class="filters">

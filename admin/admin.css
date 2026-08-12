@@ -35,3 +35,16 @@ select.estado-select { font-size: 12px; padding: 4px 6px; border-radius: 6px; bo
 .precio-input.precio-final { border-color: #0053A6; font-weight: 700; }
 .btn-guardar-precios { position: sticky; bottom: 16px; margin-top: 16px; background: #0053A6; color: #fff; border: none; padding: 12px 28px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,.2); }
 .btn-guardar-precios:hover { background: #003D7A; }
+
+.panel-box { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 16px; }
+.help-text { font-size: 13px; color: #555; line-height: 1.6; margin: 0 0 16px; }
+.help-text code { background: #eef2f7; padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+.file-input { display: block; margin: 10px 0 16px; font-size: 13px; }
+.btn-cancelar { display: inline-block; margin-left: 12px; color: #666; text-decoration: none; font-size: 13px; }
+.btn-cancelar:hover { text-decoration: underline; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; margin-bottom: 20px; }
+.form-grid label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; }
+.form-grid label.form-full { grid-column: 1 / -1; }
+.form-grid input, .form-grid select { font-weight: 400; padding: 9px 12px; border: 1.5px solid #e5e7eb; border-radius: 6px; font-size: 14px; }
+@media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
