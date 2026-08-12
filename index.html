@@ -264,7 +264,7 @@
       </button>
     </div>
     <div class="order-modal-body">
-      <form id="orderForm" onsubmit="submitOrder(event)" novalidate>
+      <form id="orderForm" onsubmit="submitOrder(event)" novalidate autocomplete="off">
 
         <div class="form-section-title">Tipo de entrega</div>
         <div class="delivery-options">
@@ -290,24 +290,24 @@
         <div class="form-row">
           <div class="form-group">
             <label>RUT <span class="req">*</span></label>
-            <input type="text" id="fRut" placeholder="12.345.678-9" maxlength="12" oninput="formatRut(this)">
+            <input type="text" id="fRut" placeholder="12.345.678-9" maxlength="12" oninput="formatRut(this)" autocomplete="off">
             <span class="form-error" id="errRut"></span>
           </div>
           <div class="form-group">
             <label>Nombre completo <span class="req">*</span></label>
-            <input type="text" id="fNombre" placeholder="Juan Pérez González">
+            <input type="text" id="fNombre" placeholder="Juan Pérez González" autocomplete="off">
             <span class="form-error" id="errNombre"></span>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>Correo electrónico <span class="req">*</span></label>
-            <input type="email" id="fEmail" placeholder="juan@correo.cl">
+            <input type="email" id="fEmail" placeholder="juan@correo.cl" autocomplete="off">
             <span class="form-error" id="errEmail"></span>
           </div>
           <div class="form-group">
             <label>Teléfono <span class="req">*</span></label>
-            <input type="tel" id="fTelefono" placeholder="+56 9 1234 5678" maxlength="16">
+            <input type="tel" id="fTelefono" placeholder="+56 9 1234 5678" maxlength="16" autocomplete="off">
             <span class="form-error" id="errTelefono"></span>
           </div>
         </div>
@@ -316,18 +316,18 @@
           <div class="form-section-title">Dirección de despacho</div>
           <div class="form-group">
             <label>Dirección <span class="req">*</span></label>
-            <input type="text" id="fDireccion" placeholder="Av. Principal 1234, Depto 5B">
+            <input type="text" id="fDireccion" placeholder="Av. Principal 1234, Depto 5B" autocomplete="off">
             <span class="form-error" id="errDireccion"></span>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>Comuna <span class="req">*</span></label>
-              <input type="text" id="fComuna" placeholder="Las Condes">
+              <input type="text" id="fComuna" placeholder="Las Condes" autocomplete="off">
               <span class="form-error" id="errComuna"></span>
             </div>
             <div class="form-group">
               <label>Ciudad</label>
-              <input type="text" id="fCiudad" placeholder="Santiago">
+              <input type="text" id="fCiudad" placeholder="Santiago" autocomplete="off">
             </div>
           </div>
         </div>
