@@ -47,7 +47,7 @@ function leerXlsx($path) {
     $sharedStrings = [];
     $ssXml = $zip->getFromName('xl/sharedStrings.xml');
     if ($ssXml !== false) {
-        $ssObj = @simplexml_load_string($ssXml);
+        $ssObj = @simplexml_load_string($ssXml, 'SimpleXMLElement', LIBXML_NONET);
         if ($ssObj !== false) {
             foreach ($ssObj->si as $si) {
                 if (isset($si->t)) {
@@ -65,7 +65,7 @@ function leerXlsx($path) {
     $zip->close();
     if ($sheetXml === false) return null;
 
-    $sheetObj = @simplexml_load_string($sheetXml);
+    $sheetObj = @simplexml_load_string($sheetXml, 'SimpleXMLElement', LIBXML_NONET);
     if ($sheetObj === false || !isset($sheetObj->sheetData)) return null;
 
     $filas = [];
@@ -106,6 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 'preview') {
 
     if (!isset($_FILES['csv']) || $_FILES['csv']['error'] !== UPLOAD_ERR_OK) {
         $error = 'No se pudo subir el archivo. Intenta de nuevo.';
+    } elseif ($_FILES['csv']['size'] > 10 * 1024 * 1024) {
+        $error = 'El archivo pesa más de 10MB — es demasiado para una lista de precios, revisá que sea el correcto.';
     } else {
         $ext = strtolower(pathinfo($_FILES['csv']['name'], PATHINFO_EXTENSION));
 

@@ -1,0 +1,10 @@
+# Nadie deberia poder acceder directo a nada de esta carpeta por HTTP —
+# create_admin.php es de un solo uso y schema.sql no es asunto de nadie
+# fuera del servidor. robots.txt ya lo sugiere, esto lo hace obligatorio.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
