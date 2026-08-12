@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $precios      = $_POST['precio'] ?? [];
         $preciosVenta = $_POST['precioVenta'] ?? [];
         $stocks       = $_POST['stock'] ?? [];
+        $titulos      = $_POST['titulo'] ?? [];
+        $nombres      = $_POST['nombre'] ?? [];
         $cambios = 0;
 
         foreach ($products as &$p) {
@@ -42,6 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($precios[$id])      && is_numeric($precios[$id]))      { $p['precio']      = max(0, (int) $precios[$id]); }
             if (isset($preciosVenta[$id]) && is_numeric($preciosVenta[$id])) { $p['precioVenta']  = max(0, (int) $preciosVenta[$id]); }
             if (isset($stocks[$id])       && is_numeric($stocks[$id]))       { $p['stock']        = max(0, (int) $stocks[$id]); }
+            if (isset($titulos[$id])      && trim($titulos[$id]) !== '')     { $p['titulo']       = trim($titulos[$id]); }
+            if (isset($nombres[$id])      && trim($nombres[$id]) !== '')     { $p['nombre']       = trim($nombres[$id]); }
             $cambios++;
         }
         unset($p);
@@ -80,7 +84,7 @@ function fmtMoney2($n) { return number_format((float) $n, 0, ',', '.'); }
       <table id="tablaProductos">
         <thead>
           <tr>
-            <th>Código</th><th>Título</th><th>Categoría</th><th>Stock</th>
+            <th>Código</th><th>Título</th><th>Nombre completo</th><th>Categoría</th><th>Stock</th>
             <th>PMP (costo)</th><th>Precio Lista</th><th>Precio Final (cliente)</th><th></th>
           </tr>
         </thead>
@@ -88,7 +92,8 @@ function fmtMoney2($n) { return number_format((float) $n, 0, ',', '.'); }
           <?php foreach ($products as $p): $id = (int) $p['id']; ?>
             <tr>
               <td class="items-detail"><?= htmlspecialchars($p['codigo'], ENT_QUOTES) ?></td>
-              <td><?= htmlspecialchars($p['titulo'], ENT_QUOTES) ?></td>
+              <td><input type="text" name="titulo[<?= $id ?>]" value="<?= htmlspecialchars($p['titulo'], ENT_QUOTES) ?>" class="texto-input"></td>
+              <td><input type="text" name="nombre[<?= $id ?>]" value="<?= htmlspecialchars($p['nombre'], ENT_QUOTES) ?>" class="texto-input"></td>
               <td class="items-detail"><?= htmlspecialchars($p['categoria'], ENT_QUOTES) ?></td>
               <td><input type="number" min="0" name="stock[<?= $id ?>]" value="<?= (int) $p['stock'] ?>" class="precio-input"></td>
               <td class="items-detail">$<?= fmtMoney2($p['pmp']) ?></td>
@@ -107,7 +112,9 @@ function fmtMoney2($n) { return number_format((float) $n, 0, ',', '.'); }
     function filtrarTabla() {
       const q = document.getElementById('buscador').value.trim().toLowerCase();
       document.querySelectorAll('#tablaProductos tbody tr').forEach(tr => {
-        tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+        const valoresInputs = Array.from(tr.querySelectorAll('input[type="text"]')).map(i => i.value).join(' ');
+        const texto = (tr.textContent + ' ' + valoresInputs).toLowerCase();
+        tr.style.display = texto.includes(q) ? '' : 'none';
       });
     }
   </script>
