@@ -23,6 +23,78 @@ function limpiarNumero($v) {
     return $v === '' ? null : (int) $v;
 }
 
+/** Convierte "A", "B", ..., "AA" (letras de columna de Excel) a índice 0-based. */
+function colLetrasAIndice($letras) {
+    $indice = 0;
+    for ($i = 0; $i < strlen($letras); $i++) {
+        $indice = $indice * 26 + (ord($letras[$i]) - ord('A') + 1);
+    }
+    return $indice - 1;
+}
+
+/**
+ * Lee la primera hoja de un .xlsx y devuelve un array de filas (cada fila
+ * un array de valores en texto), o null si no se pudo leer. Un .xlsx es en
+ * realidad un .zip con XML adentro, así que esto se hace con las
+ * extensiones estándar de PHP (Zip + SimpleXML), sin librerías externas.
+ */
+function leerXlsx($path) {
+    if (!class_exists('ZipArchive')) return null;
+
+    $zip = new ZipArchive();
+    if ($zip->open($path) !== true) return null;
+
+    $sharedStrings = [];
+    $ssXml = $zip->getFromName('xl/sharedStrings.xml');
+    if ($ssXml !== false) {
+        $ssObj = @simplexml_load_string($ssXml);
+        if ($ssObj !== false) {
+            foreach ($ssObj->si as $si) {
+                if (isset($si->t)) {
+                    $sharedStrings[] = (string) $si->t;
+                } else {
+                    $texto = '';
+                    foreach ($si->r as $r) $texto .= (string) $r->t;
+                    $sharedStrings[] = $texto;
+                }
+            }
+        }
+    }
+
+    $sheetXml = $zip->getFromName('xl/worksheets/sheet1.xml');
+    $zip->close();
+    if ($sheetXml === false) return null;
+
+    $sheetObj = @simplexml_load_string($sheetXml);
+    if ($sheetObj === false || !isset($sheetObj->sheetData)) return null;
+
+    $filas = [];
+    foreach ($sheetObj->sheetData->row as $row) {
+        $celdas = [];
+        $colIndex = 0;
+        foreach ($row->c as $c) {
+            $ref = (string) $c['r'];
+            $colLetras = preg_replace('/[0-9]/', '', $ref);
+            $indiceReal = $colLetras !== '' ? colLetrasAIndice($colLetras) : $colIndex;
+            while ($colIndex < $indiceReal) { $celdas[$colIndex] = ''; $colIndex++; }
+
+            $tipo = (string) $c['t'];
+            if ($tipo === 'inlineStr') {
+                $valor = isset($c->is->t) ? (string) $c->is->t : '';
+            } else {
+                $valor = isset($c->v) ? (string) $c->v : '';
+                if ($tipo === 's') {
+                    $valor = $sharedStrings[(int) $valor] ?? '';
+                }
+            }
+            $celdas[$colIndex] = $valor;
+            $colIndex++;
+        }
+        $filas[] = $celdas;
+    }
+    return $filas;
+}
+
 $camposValidos = ['precio', 'precioVenta', 'stock'];
 $step = $_POST['step'] ?? '';
 
@@ -35,19 +107,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 'preview') {
     if (!isset($_FILES['csv']) || $_FILES['csv']['error'] !== UPLOAD_ERR_OK) {
         $error = 'No se pudo subir el archivo. Intenta de nuevo.';
     } else {
-        $raw = file_get_contents($_FILES['csv']['tmp_name']);
-        $raw = preg_replace('/^\xEF\xBB\xBF/', '', $raw); // BOM de Excel
-        $lines = array_values(array_filter(
-            preg_split("/\r\n|\r|\n/", $raw),
-            function ($l) { return trim($l) !== ''; }
-        ));
+        $ext = strtolower(pathinfo($_FILES['csv']['name'], PATHINFO_EXTENSION));
 
-        if (count($lines) < 2) {
-            $error = 'El archivo está vacío o no tiene filas de datos.';
+        if ($ext === 'xlsx') {
+            $filas = leerXlsx($_FILES['csv']['tmp_name']);
+            if ($filas === null) {
+                $error = 'No se pudo leer el archivo Excel. Probá guardarlo como .xlsx de nuevo, o exportalo como CSV.';
+            }
+        } elseif ($ext === 'csv') {
+            $raw = file_get_contents($_FILES['csv']['tmp_name']);
+            $raw = preg_replace('/^\xEF\xBB\xBF/', '', $raw); // BOM de Excel
+            $lines = array_values(array_filter(
+                preg_split("/\r\n|\r|\n/", $raw),
+                function ($l) { return trim($l) !== ''; }
+            ));
+            $delim = (!empty($lines) && substr_count($lines[0], ';') > substr_count($lines[0], ',')) ? ';' : ',';
+            $filas = array_map(function ($l) use ($delim) { return str_getcsv($l, $delim); }, $lines);
         } else {
-            $headerLine = $lines[0];
-            $delim = (substr_count($headerLine, ';') > substr_count($headerLine, ',')) ? ';' : ',';
-            $headerRaw = str_getcsv($headerLine, $delim);
+            $error = 'Formato no reconocido — subí un archivo .csv o .xlsx.';
+            $filas = null;
+        }
+
+        if (!$error && (empty($filas) || count($filas) < 2)) {
+            $error = 'El archivo está vacío o no tiene filas de datos.';
+        }
+
+        if (!$error) {
+            $headerRaw = $filas[0];
 
             $colMap = [];
             foreach ($headerRaw as $i => $h) {
@@ -80,8 +166,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 'preview') {
                         $porCodigo[$p['codigo']] = $idx;
                     }
 
-                    for ($li = 1; $li < count($lines); $li++) {
-                        $row = str_getcsv($lines[$li], $delim);
+                    for ($li = 1; $li < count($filas); $li++) {
+                        $row = $filas[$li];
                         $codigo = trim($row[$codigoCol] ?? '');
                         if ($codigo === '') continue;
 
@@ -179,16 +265,19 @@ function fmtMoney2($n) { return number_format((float) $n, 0, ',', '.'); }
     <?php if (!$cambios && !$noEncontrados): ?>
       <div class="panel-box">
         <p class="help-text">
-          Sube un archivo <strong>CSV</strong> (si tu lista viene en Excel, usa
-          "Guardar como… → CSV") con una columna <code>codigo</code> y al menos
-          una de <code>precio</code>, <code>precioVenta</code> o <code>stock</code>.
-          Solo se actualizan los productos cuyo código coincida con uno ya
-          existente en el catálogo, y solo los campos que vengan en el archivo.
+          Sube un archivo <strong>Excel (.xlsx)</strong> o <strong>CSV</strong> con una
+          columna <code>codigo</code> y al menos una de <code>precio</code>,
+          <code>precioVenta</code> o <code>stock</code>. Si el Excel tiene varias hojas,
+          se lee solo la primera. Solo se actualizan los productos cuyo código coincida
+          con uno ya existente en el catálogo, y solo los campos que vengan en el archivo.
+          <br>Tip: si la columna <code>codigo</code> tiene ceros a la izquierda (ej.
+          <code>0188863336</code>), formateá esa columna como <strong>Texto</strong> en
+          Excel antes de guardar — si queda como número, Excel borra el cero solo.
         </p>
         <form method="post" enctype="multipart/form-data">
           <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES) ?>">
           <input type="hidden" name="step" value="preview">
-          <input type="file" name="csv" accept=".csv,text/csv" required class="file-input">
+          <input type="file" name="csv" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required class="file-input">
           <button type="submit" class="btn-guardar-precios">Analizar archivo</button>
         </form>
       </div>
