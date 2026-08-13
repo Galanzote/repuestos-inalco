@@ -1,15 +1,15 @@
-# Solo orders.php necesita ser accesible por HTTP directo (lo llama el
-# sitio al confirmar un pedido). db.php tiene las credenciales reales de
-# la base de datos — aunque PHP normalmente lo ejecuta en vez de mostrarlo,
-# esto es una segunda barrera por si alguna vez el servidor deja de
-# ejecutar PHP correctamente en esta carpeta.
+# Solo orders.php y leads.php necesitan ser accesibles por HTTP directo
+# (los llama el sitio al confirmar un pedido o pedir que lo llamen).
+# db.php tiene las credenciales reales de la base de datos — aunque PHP
+# normalmente lo ejecuta en vez de mostrarlo, esto es una segunda barrera
+# por si alguna vez el servidor deja de ejecutar PHP correctamente aca.
 <IfModule mod_authz_core.c>
-    <FilesMatch "^(?!orders\.php$).*$">
+    <FilesMatch "^(?!orders\.php$|leads\.php$).*$">
         Require all denied
     </FilesMatch>
 </IfModule>
 <IfModule !mod_authz_core.c>
-    <FilesMatch "^(?!orders\.php$).*$">
+    <FilesMatch "^(?!orders\.php$|leads\.php$).*$">
         Order allow,deny
         Deny from all
     </FilesMatch>

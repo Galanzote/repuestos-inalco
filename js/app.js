@@ -668,6 +668,11 @@ function submitCallLead(e) {
   const consulta = document.getElementById('clConsulta').value.trim();
   if (!telefono) { showToast('Ingresa tu teléfono para que te contactemos', 'error'); return; }
   saveLead({ tipo: 'callback', nombre, telefono, consulta });
+  fetch('api/leads.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nombre, telefono, consulta })
+  }).catch(() => {});
   closeCallModal();
   showToast('¡Recibido! Te llamaremos pronto.', 'success');
   const msg = `📞 *Solicitud de llamada*\n\n*Nombre:* ${nombre||'No indicado'}\n*Teléfono:* ${telefono}\n*Consulta:* ${consulta||'Sin especificar'}`;
