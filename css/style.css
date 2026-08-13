@@ -51,7 +51,8 @@ input, select { font-family: inherit; }
 .logo-main { font-size: 13px; font-weight: 500; color: var(--gray); letter-spacing: .5px; }
 .logo-sub { font-size: 20px; font-weight: 800; color: var(--blue); letter-spacing: 1px; }
 
-.header-inalco-logo { height: 76px; width: auto; object-fit: contain; flex-shrink: 0; border-right: 1.5px solid var(--gray-light); padding-right: 24px; margin-right: 4px; }
+.header-inalco-logo-link { display: flex; flex-shrink: 0; text-decoration: none; }
+.header-inalco-logo { height: 76px; width: auto; object-fit: contain; border-right: 1.5px solid var(--gray-light); padding-right: 24px; margin-right: 4px; }
 .header-search { flex: 1; }
 .search-box { display: flex; background: var(--gray-bg); border: 2px solid var(--gray-light); border-radius: 50px; overflow: hidden; transition: border-color var(--transition); }
 .search-box:focus-within { border-color: var(--blue); }
