@@ -353,32 +353,41 @@
     <button class="modal-close" onclick="closeCallModal()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
-    <div class="call-modal-icon">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+    <div id="callModalForm">
+      <div class="call-modal-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+      </div>
+      <h3>Conectar con ejecutivo</h3>
+      <p>Déjanos tus datos y te llamamos, o llámanos directamente ahora.</p>
+      <form id="callLeadForm" onsubmit="submitCallLead(event)" novalidate>
+        <div class="form-group">
+          <label>Tu nombre</label>
+          <input type="text" id="clNombre" placeholder="Juan Pérez">
+        </div>
+        <div class="form-group">
+          <label>Tu teléfono</label>
+          <input type="tel" id="clTelefono" placeholder="+56 9 1234 5678">
+        </div>
+        <div class="form-group">
+          <label>¿Qué necesitas?</label>
+          <input type="text" id="clConsulta" placeholder="Ej: Pastillas de freno para Onix 2020">
+        </div>
+        <div class="call-modal-actions">
+          <a href="tel:+56972306103" class="btn-call-direct" onclick="registerCallLead(event)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+            Llamar ahora
+          </a>
+          <button type="submit" class="btn-call-register">Solicitar que me llamen</button>
+        </div>
+      </form>
     </div>
-    <h3>Conectar con ejecutivo</h3>
-    <p>Déjanos tus datos y te llamamos, o llámanos directamente ahora.</p>
-    <form id="callLeadForm" onsubmit="submitCallLead(event)" novalidate>
-      <div class="form-group">
-        <label>Tu nombre</label>
-        <input type="text" id="clNombre" placeholder="Juan Pérez">
+    <div id="callModalSuccess" style="display:none;">
+      <div class="call-modal-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
       </div>
-      <div class="form-group">
-        <label>Tu teléfono</label>
-        <input type="tel" id="clTelefono" placeholder="+56 9 1234 5678">
-      </div>
-      <div class="form-group">
-        <label>¿Qué necesitas?</label>
-        <input type="text" id="clConsulta" placeholder="Ej: Pastillas de freno para Onix 2020">
-      </div>
-      <div class="call-modal-actions">
-        <a href="tel:+56972306103" class="btn-call-direct" onclick="registerCallLead(event)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-          Llamar ahora
-        </a>
-        <button type="submit" class="btn-call-register">Solicitar que me llamen</button>
-      </div>
-    </form>
+      <h3>¡Gracias!</h3>
+      <p>Por favor espera, en los próximos minutos uno de nuestros ejecutivos te va a llamar. Mantente disponible en el teléfono que nos dejaste.</p>
+    </div>
   </div>
 
   <!-- Policies Modal -->

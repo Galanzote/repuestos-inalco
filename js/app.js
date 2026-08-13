@@ -649,6 +649,9 @@ function closeCallModal() {
   document.getElementById('callOverlay').classList.remove('open');
   document.getElementById('callModal').classList.remove('open');
   document.body.style.overflow = '';
+  document.getElementById('callModalForm').style.display = '';
+  document.getElementById('callModalSuccess').style.display = 'none';
+  document.getElementById('callLeadForm').reset();
 }
 
 function registerCallLead(e) {
@@ -673,10 +676,14 @@ function submitCallLead(e) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ nombre, telefono, consulta })
   }).catch(() => {});
-  closeCallModal();
-  showToast('¡Recibido! Te llamaremos pronto.', 'success');
+
+  document.getElementById('callModalForm').style.display = 'none';
+  document.getElementById('callModalSuccess').style.display = 'block';
+
   const msg = `📞 *Solicitud de llamada*\n\n*Nombre:* ${nombre||'No indicado'}\n*Teléfono:* ${telefono}\n*Consulta:* ${consulta||'Sin especificar'}`;
   window.open('https://wa.me/56972306103?text='+encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+
+  setTimeout(closeCallModal, 4000);
 }
 
 function saveLead(data) {
